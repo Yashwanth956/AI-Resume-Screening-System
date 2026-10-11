@@ -56,3 +56,6 @@ htmlcov/
 build/
 dist/
 *.egg-info/
+
+# Parser backup files
+resume_parser/*_before_*.py
