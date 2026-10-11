@@ -1,0 +1,645 @@
+/* =========================================================
+   HISTORY PAGE
+   ========================================================= */
+
+.history-page {
+    margin: 0;
+    min-height: 100vh;
+    background: #f5f7fb;
+    color: #172033;
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+.history-page * {
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.history-nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e9f0;
+}
+
+.history-nav-inner {
+    width: min(1200px, calc(100% - 32px));
+    min-height: 68px;
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+.history-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    text-decoration: none;
+    color: #182135;
+
+    font-weight: 800;
+}
+
+.history-brand-mark {
+    width: 38px;
+    height: 38px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 12px;
+
+    background: #1f5eff;
+    color: white;
+
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.history-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.history-nav-links a {
+    text-decoration: none;
+    color: #667085;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.history-nav-links a:hover,
+.history-nav-links a.active {
+    color: #1f5eff;
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.history-shell {
+    width: min(1200px, calc(100% - 32px));
+    margin: 0 auto;
+
+    padding: 35px 0 60px;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.history-hero {
+    margin-bottom: 22px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    gap: 24px;
+}
+
+.history-eyebrow,
+.history-section-kicker {
+    margin: 0 0 8px;
+
+    color: #1f5eff;
+
+    font-size: 12px;
+    font-weight: 900;
+
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.history-hero h1 {
+    margin: 0;
+
+    font-size: 40px;
+    line-height: 1.1;
+
+    color: #172033;
+}
+
+.history-hero p {
+    margin: 10px 0 0;
+
+    color: #697386;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.history-card {
+    margin-bottom: 20px;
+    padding: 24px;
+
+    border: 1px solid #e5e9f0;
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 8px 28px rgba(22, 35, 58, 0.05);
+}
+
+.history-section-heading {
+    margin-bottom: 18px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    gap: 16px;
+}
+
+.history-section-heading h2 {
+    margin: 0;
+
+    font-size: 21px;
+    color: #182135;
+}
+
+.history-count {
+    padding: 7px 11px;
+
+    border-radius: 999px;
+
+    background: #edf3ff;
+    color: #1f5eff;
+
+    font-size: 12px;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+.history-search-box label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #5f697b;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.history-search-input-wrap {
+    position: relative;
+}
+
+.history-search-icon {
+    position: absolute;
+
+    left: 14px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    font-size: 15px;
+}
+
+.history-search-input-wrap input {
+    width: 100%;
+
+    padding: 13px 14px 13px 42px;
+
+    border: 1px solid #dfe4ec;
+    border-radius: 12px;
+
+    background: #fbfcfe;
+
+    font-size: 14px;
+
+    outline: none;
+}
+
+.history-search-input-wrap input:focus {
+    border-color: #1f5eff;
+
+    box-shadow:
+        0 0 0 3px rgba(31, 94, 255, 0.10);
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.history-table-wrap {
+    overflow-x: auto;
+
+    border: 1px solid #e7ebf1;
+    border-radius: 14px;
+}
+
+#historyTable {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 1050px;
+}
+
+#historyTable th {
+    padding: 14px 18px;
+
+    background: #f7f9fc;
+
+    color: #667085;
+
+    font-size: 12px;
+    font-weight: 900;
+
+    text-align: left;
+    white-space: nowrap;
+
+    border-bottom: 1px solid #e6eaf0;
+}
+
+#historyTable td {
+    padding: 16px 18px;
+
+    border-bottom: 1px solid #edf0f4;
+
+    color: #3f4b61;
+
+    font-size: 13px;
+
+    vertical-align: middle;
+}
+
+#historyTable tbody tr:hover {
+    background: #fafbfe;
+}
+
+#historyTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =========================================================
+   TABLE ELEMENTS
+   ========================================================= */
+
+.history-id {
+    font-weight: 800;
+    color: #7a8496;
+}
+
+.candidate-cell {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.candidate-avatar {
+    width: 36px;
+    height: 36px;
+
+    flex: 0 0 36px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 50%;
+
+    background: #edf3ff;
+    color: #1f5eff;
+
+    font-weight: 900;
+}
+
+.candidate-cell strong {
+    color: #222d43;
+}
+
+.resume-file-name {
+    max-width: 220px;
+
+    display: inline-block;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+.experience-pill {
+    padding: 6px 9px;
+
+    border-radius: 999px;
+
+    background: #f0f3f8;
+    color: #536075;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   SCORE BADGES
+   ========================================================= */
+
+.history-score {
+    display: inline-block;
+
+    min-width: 58px;
+
+    padding: 7px 10px;
+
+    border-radius: 999px;
+
+    text-align: center;
+
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.score-good {
+    background: #e8f8ed;
+    color: #17753b;
+}
+
+.score-medium {
+    background: #fff5dc;
+    color: #956300;
+}
+
+.score-low {
+    background: #fff0ef;
+    color: #b53d36;
+}
+
+
+/* =========================================================
+   MATCH CATEGORY
+   ========================================================= */
+
+.match-badge {
+    display: inline-block;
+
+    padding: 7px 10px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+.match-strong {
+    background: #e8f8ed;
+    color: #17753b;
+}
+
+.match-moderate {
+    background: #fff5dc;
+    color: #956300;
+}
+
+.match-low {
+    background: #fff0ef;
+    color: #b53d36;
+}
+
+.history-date {
+    color: #727c8e;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.history-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.history-actions form {
+    margin: 0;
+}
+
+.history-action-btn {
+    min-height: 36px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 13px;
+
+    border-radius: 9px;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    text-decoration: none;
+
+    border: 1px solid transparent;
+}
+
+.view-btn {
+    background: #edf3ff;
+    color: #1f5eff;
+}
+
+.view-btn:hover {
+    background: #dfe9ff;
+}
+
+.delete-btn {
+    background: #fff1f0;
+    color: #c03f37;
+
+    border: none;
+}
+
+.delete-btn:hover {
+    background: #ffe4e1;
+}
+
+
+/* =========================================================
+   MAIN BUTTONS
+   ========================================================= */
+
+.history-btn {
+    min-height: 44px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 18px;
+
+    border-radius: 12px;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    transition: 0.2s;
+}
+
+.history-btn-primary {
+    background: #1f5eff;
+    color: white;
+
+    box-shadow:
+        0 8px 20px rgba(31, 94, 255, 0.18);
+}
+
+.history-btn-primary:hover {
+    background: #174bd1;
+
+    transform: translateY(-1px);
+}
+
+.history-btn-secondary {
+    background: white;
+    color: #344054;
+
+    border: 1px solid #dfe4ec;
+}
+
+.history-btn-secondary:hover {
+    border-color: #bcc7d8;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.history-empty-state {
+    padding: 45px 20px;
+
+    text-align: center;
+}
+
+.empty-icon {
+    margin-bottom: 12px;
+
+    font-size: 36px;
+}
+
+.history-empty-state h3 {
+    margin: 0 0 8px;
+
+    color: #263148;
+}
+
+.history-empty-state p {
+    margin: 0 0 18px;
+
+    color: #778196;
+}
+
+
+/* =========================================================
+   BOTTOM ACTIONS
+   ========================================================= */
+
+.history-bottom-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    margin-top: 25px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+    .history-hero {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+}
+
+
+@media (max-width: 640px) {
+
+    .history-shell,
+    .history-nav-inner {
+        width: calc(100% - 22px);
+    }
+
+    .history-nav-links {
+        gap: 10px;
+    }
+
+    .history-nav-links a {
+        font-size: 12px;
+    }
+
+    .history-brand span:last-child {
+        display: none;
+    }
+
+    .history-hero h1 {
+        font-size: 30px;
+    }
+
+    .history-card {
+        padding: 18px;
+    }
+
+    .history-section-heading {
+        flex-direction: column;
+    }
+
+    .history-btn {
+        width: 100%;
+    }
+
+    .history-bottom-actions {
+        flex-direction: column;
+    }
+
+}

@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Resume Screening Dashboard
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/dashboard.css') }}"
+    >
+
+</head>
+
+
+<body class="dashboard-page">
+
+
+    <!-- ================================================= -->
+    <!-- NAVIGATION -->
+    <!-- ================================================= -->
+
+    <header class="dashboard-nav">
+
+        <div class="dashboard-nav-inner">
+
+
+            <a
+                href="{{ url_for('home') }}"
+                class="dashboard-brand"
+            >
+
+                <span class="dashboard-brand-mark">
+                    AI
+                </span>
+
+                <span>
+                    Resume Screening
+                </span>
+
+            </a>
+
+
+
+            <nav class="dashboard-nav-links">
+
+                <a href="{{ url_for('home') }}">
+                    Home
+                </a>
+
+                <a
+                    href="{{ url_for('dashboard') }}"
+                    class="active"
+                >
+                    Dashboard
+                </a>
+
+                <a href="{{ url_for('history') }}">
+                    History
+                </a>
+
+            </nav>
+
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ================================================= -->
+    <!-- MAIN -->
+    <!-- ================================================= -->
+
+    <main class="dashboard-shell">
+
+
+        <!-- ================================================= -->
+        <!-- HERO -->
+        <!-- ================================================= -->
+
+        <section class="dashboard-hero">
+
+
+            <div>
+
+                <p class="dashboard-eyebrow">
+
+                    Analytics Overview
+
+                </p>
+
+
+                <h1>
+
+                    Resume Screening Dashboard
+
+                </h1>
+
+
+                <p>
+
+                    Monitor resume analyses, ATS performance
+                    and job matching results.
+
+                </p>
+
+            </div>
+
+
+
+            <a
+                href="{{ url_for('home') }}"
+                class="dashboard-btn dashboard-btn-primary"
+            >
+
+                Analyze New Resume
+
+            </a>
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- SUMMARY CARDS -->
+        <!-- ================================================= -->
+
+        <section class="stats-grid">
+
+
+            <!-- TOTAL -->
+
+            <article class="stat-card">
+
+
+                <div class="stat-icon">
+                    📄
+                </div>
+
+
+                <div>
+
+                    <span class="stat-label">
+
+                        Total Analyses
+
+                    </span>
+
+
+                    <strong>
+
+                        {{
+                            total_analyses
+                            | default(0, true)
+                        }}
+
+                    </strong>
+
+                </div>
+
+
+            </article>
+
+
+
+            <!-- AVG ATS -->
+
+            <article class="stat-card">
+
+
+                <div class="stat-icon">
+                    📊
+                </div>
+
+
+                <div>
+
+                    <span class="stat-label">
+
+                        Average ATS Score
+
+                    </span>
+
+
+                    <strong>
+
+                        {{
+                            average_ats
+                            | default(0, true)
+                        }}%
+
+                    </strong>
+
+                </div>
+
+
+            </article>
+
+
+
+            <!-- AVG MATCH -->
+
+            <article class="stat-card">
+
+
+                <div class="stat-icon">
+                    🎯
+                </div>
+
+
+                <div>
+
+                    <span class="stat-label">
+
+                        Average Job Match
+
+                    </span>
+
+
+                    <strong>
+
+                        {{
+                            average_job_match
+                            | default(0, true)
+                        }}%
+
+                    </strong>
+
+                </div>
+
+
+            </article>
+
+
+
+            <!-- HIGHEST ATS -->
+
+            <article class="stat-card">
+
+
+                <div class="stat-icon">
+                    ⭐
+                </div>
+
+
+                <div>
+
+                    <span class="stat-label">
+
+                        Highest ATS
+
+                    </span>
+
+
+                    <strong>
+
+                        {{
+                            highest_ats
+                            | default(0, true)
+                        }}%
+
+                    </strong>
+
+                </div>
+
+
+            </article>
+
+
+
+            <!-- HIGHEST MATCH -->
+
+            <article class="stat-card">
+
+
+                <div class="stat-icon">
+                    🏆
+                </div>
+
+
+                <div>
+
+                    <span class="stat-label">
+
+                        Highest Job Match
+
+                    </span>
+
+
+                    <strong>
+
+                        {{
+                            highest_job_match
+                            | default(0, true)
+                        }}%
+
+                    </strong>
+
+                </div>
+
+
+            </article>
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- ANALYTICS -->
+        <!-- ================================================= -->
+
+        <section class="dashboard-grid">
+
+
+            <!-- MATCH DISTRIBUTION -->
+
+            <article class="dashboard-card">
+
+
+                <div class="dashboard-card-heading">
+
+
+                    <div>
+
+                        <p class="dashboard-section-kicker">
+
+                            Matching
+
+                        </p>
+
+
+                        <h2>
+
+                            Match Distribution
+
+                        </h2>
+
+                    </div>
+
+
+                </div>
+
+
+
+                {% set categories =
+                    category_distribution
+                    | default({}, true)
+                %}
+
+
+
+                {% if categories %}
+
+
+                    {% for category, count in categories.items() %}
+
+
+                    <div class="distribution-row">
+
+
+                        <div class="distribution-label">
+
+
+                            <span>
+
+                                {{ category }}
+
+                            </span>
+
+
+                            <strong>
+
+                                {{ count }}
+
+                            </strong>
+
+
+                        </div>
+
+
+
+                        {% set percentage =
+                            (
+                                count /
+                                total_analyses *
+                                100
+                            )
+                            if total_analyses
+                            else 0
+                        %}
+
+
+                        <progress
+                            max="100"
+                            value="{{ percentage }}"
+                        >
+
+                            {{ percentage }}%
+
+                        </progress>
+
+
+                    </div>
+
+
+                    {% endfor %}
+
+
+                {% else %}
+
+
+                    <div class="dashboard-empty">
+
+                        No match distribution data available.
+
+                    </div>
+
+
+                {% endif %}
+
+
+            </article>
+
+
+
+            <!-- QUICK ACTIONS -->
+
+            <article class="dashboard-card">
+
+
+                <div class="dashboard-card-heading">
+
+
+                    <div>
+
+                        <p class="dashboard-section-kicker">
+
+                            Navigation
+
+                        </p>
+
+
+                        <h2>
+
+                            Quick Actions
+
+                        </h2>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="quick-actions">
+
+
+                    <a
+                        href="{{ url_for('home') }}"
+                        class="quick-action"
+                    >
+
+                        <div class="quick-action-icon">
+
+                            ＋
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+
+                                Analyze Resume
+
+                            </strong>
+
+
+                            <span>
+
+                                Upload a new resume
+
+                            </span>
+
+                        </div>
+
+
+                    </a>
+
+
+
+                    <a
+                        href="{{ url_for('history') }}"
+                        class="quick-action"
+                    >
+
+                        <div class="quick-action-icon">
+
+                            ↻
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+
+                                View History
+
+                            </strong>
+
+
+                            <span>
+
+                                Browse saved analyses
+
+                            </span>
+
+                        </div>
+
+
+                    </a>
+
+
+                </div>
+
+
+            </article>
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- RECENT ANALYSES -->
+        <!-- ================================================= -->
+
+        <section class="dashboard-card recent-card">
+
+
+            <div class="dashboard-card-heading">
+
+
+                <div>
+
+                    <p class="dashboard-section-kicker">
+
+                        Latest Activity
+
+                    </p>
+
+
+                    <h2>
+
+                        Recent Analyses
+
+                    </h2>
+
+                </div>
+
+
+
+                <a
+                    href="{{ url_for('history') }}"
+                    class="view-all-link"
+                >
+
+                    View All
+
+                </a>
+
+
+            </div>
+
+
+
+            {% set recent =
+                recent_analyses
+                | default([], true)
+            %}
+
+
+
+            {% if recent %}
+
+
+            <div class="dashboard-table-wrap">
+
+
+                <table class="dashboard-table">
+
+
+                    <thead>
+
+
+                        <tr>
+
+                            <th>
+                                Candidate
+                            </th>
+
+                            <th>
+                                Resume
+                            </th>
+
+                            <th>
+                                ATS Score
+                            </th>
+
+                            <th>
+                                Job Match
+                            </th>
+
+                            <th>
+                                Category
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+
+                    </thead>
+
+
+
+                    <tbody>
+
+
+                        {% for analysis in recent %}
+
+
+                        <tr>
+
+
+                            <td>
+
+
+                                <div class="dashboard-candidate">
+
+
+                                    <span class="candidate-circle">
+
+                                        {{
+                                            analysis.candidate_name[0]
+                                            if analysis.candidate_name
+                                            else "?"
+                                        }}
+
+                                    </span>
+
+
+                                    <strong>
+
+                                        {{
+                                            analysis.candidate_name
+                                            or
+                                            "Unknown"
+                                        }}
+
+                                    </strong>
+
+
+                                </div>
+
+
+                            </td>
+
+
+
+                            <td>
+
+                                <span class="dashboard-file">
+
+                                    {{
+                                        analysis.resume_filename
+                                        or
+                                        "-"
+                                    }}
+
+                                </span>
+
+                            </td>
+
+
+
+                            <td>
+
+
+                                {% set ats =
+                                    analysis.ats_score
+                                    or 0
+                                %}
+
+
+                                <span
+                                    class="
+                                        dashboard-score
+
+                                        {% if ats >= 75 %}
+
+                                            good
+
+                                        {% elif ats >= 50 %}
+
+                                            medium
+
+                                        {% else %}
+
+                                            low
+
+                                        {% endif %}
+                                    "
+                                >
+
+                                    {{ ats }}%
+
+                                </span>
+
+
+                            </td>
+
+
+
+                            <td>
+
+
+                                {% set match =
+                                    analysis.job_match_score
+                                    or 0
+                                %}
+
+
+                                <span
+                                    class="
+                                        dashboard-score
+
+                                        {% if match >= 75 %}
+
+                                            good
+
+                                        {% elif match >= 50 %}
+
+                                            medium
+
+                                        {% else %}
+
+                                            low
+
+                                        {% endif %}
+                                    "
+                                >
+
+                                    {{ match }}%
+
+                                </span>
+
+
+                            </td>
+
+
+
+                            <td>
+
+
+                                <span class="dashboard-category">
+
+                                    {{
+                                        analysis.match_category
+                                        or
+                                        "Not Available"
+                                    }}
+
+                                </span>
+
+
+                            </td>
+
+
+
+                            <td>
+
+                                <span class="dashboard-date">
+
+                                    {{
+                                        analysis.created_at
+                                        or
+                                        "-"
+                                    }}
+
+                                </span>
+
+                            </td>
+
+
+
+                            <td>
+
+
+                                <a
+                                    class="view-analysis-btn"
+                                    href="{{ url_for('analysis_detail', analysis_id=analysis.id) }}"
+                                >
+
+                                    View
+
+                                </a>
+
+
+                            </td>
+
+
+                        </tr>
+
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+            {% else %}
+
+
+            <div class="dashboard-empty">
+
+
+                <div class="dashboard-empty-icon">
+
+                    📄
+
+                </div>
+
+
+                <h3>
+
+                    No analyses yet
+
+                </h3>
+
+
+                <p>
+
+                    Start by analyzing a resume.
+
+                </p>
+
+
+                <a
+                    href="{{ url_for('home') }}"
+                    class="dashboard-btn dashboard-btn-primary"
+                >
+
+                    Analyze Resume
+
+                </a>
+
+
+            </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- BOTTOM -->
+        <!-- ================================================= -->
+
+        <section class="dashboard-bottom-actions">
+
+
+            <a
+                href="{{ url_for('home') }}"
+                class="dashboard-btn dashboard-btn-primary"
+            >
+
+                Analyze New Resume
+
+            </a>
+
+
+            <a
+                href="{{ url_for('history') }}"
+                class="dashboard-btn dashboard-btn-secondary"
+            >
+
+                Analysis History
+
+            </a>
+
+
+        </section>
+
+
+    </main>
+
+
+</body>
+
+</html>

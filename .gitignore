@@ -1,0 +1,58 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Uploaded resumes
+uploads/*
+!uploads/.gitkeep
+
+static/uploads/*
+!static/uploads/.gitkeep
+
+# SQLite database
+database/*.db
+database/*.sqlite
+database/*.sqlite3
+
+# Development backups
+app_backup.py
+app_before_*.py
+app_old_*.py
+patch_*.py
+
+# Duplicate nested project folder
+AI-Resume-Screening-System/
+
+# Temporary files
+*.log
+*.tmp
+*.temp
+
+# Test/cache files
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Build files
+build/
+dist/
+*.egg-info/

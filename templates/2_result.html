@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Resume Analysis Result
+    </title>
+
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/result.css') }}"
+    >
+
+</head>
+
+
+<body class="result-page">
+
+
+    {% set ats = ats_score|default(0, true) %}
+    {% set skill = skill_score|default(0, true) %}
+    {% set keyword = keyword_score|default(0, true) %}
+    {% set exp_score = experience_score|default(0, true) %}
+    {% set edu_score = education_score|default(0, true) %}
+    {% set proj_score = project_score|default(0, true) %}
+    {% set quality_score = resume_quality_score|default(0, true) %}
+
+    {% set jm = job_match_result|default({}, true) %}
+    {% set exp = experience|default({}, true) %}
+    {% set roles = recommended_roles|default([], true) %}
+    {% set resume_skills = skills|default([], true) %}
+    {% set required_skills = job_skills|default([], true) %}
+    {% set matched_skills = matching_skills|default([], true) %}
+    {% set missing = missing_skills|default([], true) %}
+    {% set edu = education|default([], true) %}
+    {% set project_list = projects|default([], true) %}
+    {% set tips = suggestions|default([], true) %}
+
+
+
+    <!-- ================================================= -->
+    <!-- NAVIGATION -->
+    <!-- ================================================= -->
+
+    <header class="result-nav">
+
+        <div class="result-nav-inner">
+
+
+            <a
+                class="brand"
+                href="{{ url_for('home') }}"
+            >
+
+                <span class="brand-mark">
+                    AI
+                </span>
+
+                <span>
+                    Resume Screening
+                </span>
+
+            </a>
+
+
+
+            <nav class="result-nav-links">
+
+                <a href="{{ url_for('home') }}">
+                    Home
+                </a>
+
+                <a href="{{ url_for('dashboard') }}">
+                    Dashboard
+                </a>
+
+                <a href="{{ url_for('history') }}">
+                    History
+                </a>
+
+            </nav>
+
+
+        </div>
+
+    </header>
+
+
+
+    <main class="result-shell">
+
+
+        <!-- ================================================= -->
+        <!-- PAGE HEADER -->
+        <!-- ================================================= -->
+
+        <section class="result-hero">
+
+
+            <div>
+
+                <p class="eyebrow">
+
+                    AI Resume Screening & Job Recommendation System
+
+                </p>
+
+
+                <h1>
+                    Resume Analysis Result
+                </h1>
+
+
+                <p class="hero-copy">
+
+                    AI-powered analysis of your resume
+                    against the provided job description.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="hero-actions">
+
+
+                {% if analysis_id|default(false) %}
+
+                <a
+                    class="btn btn-primary"
+                    href="{{ url_for('download_analysis_pdf', analysis_id=analysis_id) }}"
+                >
+
+                    Download PDF Report
+
+                </a>
+
+                {% endif %}
+
+
+
+                <a
+                    class="btn btn-secondary"
+                    href="{{ url_for('home') }}"
+                >
+
+                    Analyze Another Resume
+
+                </a>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- CANDIDATE INFORMATION -->
+        <!-- ================================================= -->
+
+        <section class="panel">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="section-kicker">
+                        Candidate
+                    </p>
+
+                    <h2>
+                        Candidate Information
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="candidate-grid">
+
+
+                <div class="candidate-item">
+
+                    <span class="label">
+                        Name
+                    </span>
+
+                    <strong>
+                        {{ name|default("Not detected", true) }}
+                    </strong>
+
+                </div>
+
+
+
+                <div class="candidate-item">
+
+                    <span class="label">
+                        Email
+                    </span>
+
+                    <strong>
+                        {{ email|default("Not detected", true) }}
+                    </strong>
+
+                </div>
+
+
+
+                <div class="candidate-item">
+
+                    <span class="label">
+                        Phone
+                    </span>
+
+                    <strong>
+                        {{ phone|default("Not detected", true) }}
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- SCORE OVERVIEW -->
+        <!-- ================================================= -->
+
+        <section class="panel">
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+                    <p class="section-kicker">
+                        Screening
+                    </p>
+
+                    <h2>
+                        Score Overview
+                    </h2>
+
+                </div>
+
+
+
+                <span
+                    class="score-badge
+
+                    {% if ats >= 75 %}
+
+                        score-good
+
+                    {% elif ats >= 50 %}
+
+                        score-medium
+
+                    {% else %}
+
+                        score-low
+
+                    {% endif %}
+                    "
+                >
+
+                    ATS {{ ats }}%
+
+                </span>
+
+
+            </div>
+
+
+
+            <div class="headline-score-grid">
+
+
+                <!-- ATS SCORE -->
+
+                <article class="headline-score-card">
+
+
+                    <span class="score-label">
+
+                        Final ATS Score
+
+                    </span>
+
+
+                    <strong class="score-number">
+
+                        {{ ats }}%
+
+                    </strong>
+
+
+                    <progress
+                        class="score-progress"
+                        max="100"
+                        value="{{ ats }}"
+                    >
+
+                        {{ ats }}%
+
+                    </progress>
+
+
+                </article>
+
+
+
+                <!-- JOB MATCH SCORE -->
+
+                <article class="headline-score-card">
+
+
+                    <span class="score-label">
+
+                        Job Match Score
+
+                    </span>
+
+
+                    <strong class="score-number">
+
+                        {{
+                            jm.get(
+                                "match_score",
+                                0
+                            )
+                        }}%
+
+                    </strong>
+
+
+                    <progress
+                        class="score-progress"
+                        max="100"
+                        value="{{ jm.get('match_score', 0) }}"
+                    >
+
+                        {{
+                            jm.get(
+                                "match_score",
+                                0
+                            )
+                        }}%
+
+                    </progress>
+
+
+
+                    <span class="match-category">
+
+                        {{
+                            jm.get(
+                                "match_category",
+                                "Not Available"
+                            )
+                        }}
+
+                    </span>
+
+
+                </article>
+
+
+            </div>
+
+
+
+            <!-- ================================================= -->
+            <!-- ATS COMPONENT SCORES -->
+            <!-- ================================================= -->
+
+            <div class="component-score-grid">
+
+
+                <article class="metric-card">
+
+                    <span>
+                        Skill
+                    </span>
+
+                    <strong>
+                        {{ skill }}%
+                    </strong>
+
+                    <progress
+                        max="100"
+                        value="{{ skill }}"
+                    >
+                    </progress>
+
+                </article>
+
+
+
+                <article class="metric-card">
+
+                    <span>
+                        Keyword
+                    </span>
+
+                    <strong>
+                        {{ keyword }}%
+                    </strong>
+
+                    <progress
+                        max="100"
+                        value="{{ keyword }}"
+                    >
+                    </progress>
+
+                </article>
+
+
+
+                <article class="metric-card">
+
+                    <span>
+                        Experience
+                    </span>
+
+                    <strong>
+                        {{ exp_score }}%
+                    </strong>
+
+                    <progress
+                        max="100"
+                        value="{{ exp_score }}"
+                    >
+                    </progress>
+
+                </article>
+
+
+
+                <article class="metric-card">
+
+                    <span>
+                        Education
+                    </span>
+
+                    <strong>
+                        {{ edu_score }}%
+                    </strong>
+
+                    <progress
+                        max="100"
+                        value="{{ edu_score }}"
+                    >
+                    </progress>
+
+                </article>
+
+
+
+                <article class="metric-card">
+
+                    <span>
+                        Projects
+                    </span>
+
+                    <strong>
+                        {{ proj_score }}%
+                    </strong>
+
+                    <progress
+                        max="100"
+                        value="{{ proj_score }}"
+                    >
+                    </progress>
+
+                </article>
+
+
+
+                <article class="metric-card">
+
+                    <span>
+                        Resume Quality
+                    </span>
+
+                    <strong>
+                        {{ quality_score }}%
+                    </strong>
+
+                    <progress
+                        max="100"
+                        value="{{ quality_score }}"
+                    >
+                    </progress>
+
+                </article>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- JOB DESCRIPTION -->
+        <!-- ================================================= -->
+
+        <section class="panel">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="section-kicker">
+                        Target Role
+                    </p>
+
+                    <h2>
+                        Job Description
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="job-description-box">
+
+                {{
+                    job_description
+                    | default(
+                        "No job description provided.",
+                        true
+                    )
+                }}
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- SKILL MATCH -->
+        <!-- ================================================= -->
+
+        <section class="panel">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="section-kicker">
+                        Compatibility
+                    </p>
+
+                    <h2>
+                        Skill Match Analysis
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="skill-columns">
+
+
+                <!-- REQUIRED SKILLS -->
+
+                <div class="skill-block">
+
+
+                    <h3>
+                        Job Required Skills
+                    </h3>
+
+
+                    <div class="tag-list">
+
+
+                        {% if required_skills %}
+
+
+                            {% for item in required_skills %}
+
+                                <span
+                                    class="
+                                        skill-tag
+                                        neutral
+                                    "
+                                >
+
+                                    {{ item }}
+
+                                </span>
+
+                            {% endfor %}
+
+
+                        {% else %}
+
+
+                            <p class="empty-state">
+
+                                No required skills detected.
+
+                            </p>
+
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- MATCHING SKILLS -->
+
+                <div class="skill-block">
+
+
+                    <h3>
+                        Matching Skills
+                    </h3>
+
+
+                    <div class="tag-list">
+
+
+                        {% if matched_skills %}
+
+
+                            {% for item in matched_skills %}
+
+                                <span
+                                    class="
+                                        skill-tag
+                                        matched
+                                    "
+                                >
+
+                                    {{ item }}
+
+                                </span>
+
+                            {% endfor %}
+
+
+                        {% else %}
+
+
+                            <p class="empty-state">
+
+                                No matching skills found.
+
+                            </p>
+
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- MISSING SKILLS -->
+
+                <div class="skill-block">
+
+
+                    <h3>
+                        Missing Skills
+                    </h3>
+
+
+                    <div class="tag-list">
+
+
+                        {% if missing %}
+
+
+                            {% for item in missing %}
+
+                                <span
+                                    class="
+                                        skill-tag
+                                        missing
+                                    "
+                                >
+
+                                    {{ item }}
+
+                                </span>
+
+                            {% endfor %}
+
+
+                        {% else %}
+
+
+                            <p
+                                class="
+                                    empty-state
+                                    success-text
+                                "
+                            >
+
+                                No missing required skills.
+
+                            </p>
+
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- RESUME SKILLS -->
+        <!-- ================================================= -->
+
+        <section class="panel">
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+                    <p class="section-kicker">
+                        Profile
+                    </p>
+
+                    <h2>
+                        Resume Skills
+                    </h2>
+
+                </div>
+
+
+
+                <span class="count-pill">
+
+                    {{ resume_skills|length }}
+                    detected
+
+                </span>
+
+
+            </div>
+
+
+
+            <div class="tag-list">
+
+
+                {% if resume_skills %}
+
+
+                    {% for item in resume_skills %}
+
+                        <span
+                            class="
+                                skill-tag
+                                resume-skill
+                            "
+                        >
+
+                            {{ item }}
+
+                        </span>
+
+                    {% endfor %}
+
+
+                {% else %}
+
+
+                    <p class="empty-state">
+
+                        No recognized skills detected.
+
+                    </p>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- RECOMMENDED JOB ROLES -->
+        <!-- ================================================= -->
+
+        <section class="panel">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="section-kicker">
+                        Career Fit
+                    </p>
+
+                    <h2>
+                        Recommended Job Roles
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            {% if roles %}
+
+
+            <div class="role-grid">
+
+
+                {% for role in roles %}
+
+
+                <article class="role-card">
+
+
+                    <div class="role-card-top">
+
+
+                        <div class="role-rank">
+
+                            #{{ loop.index }}
+
+                        </div>
+
+
+
+                        <div class="role-score">
+
+                            {{
+                                role.get(
+                                    "score",
+                                    0
+                                )
+                            }}%
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <h3>
+
+                        {{
+                            role.get(
+                                "role",
+                                "Unknown Role"
+                            )
+                        }}
+
+                    </h3>
+
+
+
+                    <progress
+                        class="role-progress-bar"
+                        max="100"
+                        value="{{ role.get('score', 0) }}"
+                    >
+                    </progress>
+
+
+
+                    <div class="role-skill-group">
+
+
+                        <p class="role-label">
+
+                            Matching Skills
+
+                        </p>
+
+
+                        <div
+                            class="
+                                tag-list
+                                compact
+                            "
+                        >
+
+
+                            {% for item in role.get(
+                                "matching_skills",
+                                []
+                            ) %}
+
+
+                                <span
+                                    class="
+                                        skill-tag
+                                        matched
+                                    "
+                                >
+
+                                    {{ item }}
+
+                                </span>
+
+
+                            {% else %}
+
+
+                                <span class="muted-text">
+
+                                    No matching skills.
+
+                                </span>
+
+
+                            {% endfor %}
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="role-skill-group">
+
+
+                        <p class="role-label">
+
+                            Skills to Improve
+
+                        </p>
+
+
+                        <div
+                            class="
+                                tag-list
+                                compact
+                            "
+                        >
+
+
+                            {% for item in role.get(
+                                "missing_skills",
+                                []
+                            ) %}
+
+
+                                <span
+                                    class="
+                                        skill-tag
+                                        missing
+                                    "
+                                >
+
+                                    {{ item }}
+
+                                </span>
+
+
+                            {% else %}
+
+
+                                <span class="muted-text">
+
+                                    No major gaps detected.
+
+                                </span>
+
+
+                            {% endfor %}
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </article>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+            {% else %}
+
+
+                <p class="empty-state">
+
+                    No job role recommendations available.
+
+                </p>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- RESUME IMPROVEMENT SUGGESTIONS -->
+        <!-- ================================================= -->
+
+        {% if tips %}
+
+
+        <section
+            class="
+                panel
+                suggestion-panel
+            "
+        >
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+                    <p class="section-kicker">
+                        Action Plan
+                    </p>
+
+                    <h2>
+                        Resume Improvement Suggestions
+                    </h2>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="suggestion-list">
+
+
+                {% for suggestion in tips %}
+
+
+                <div class="suggestion-item">
+
+
+                    <span class="suggestion-number">
+
+                        {{ loop.index }}
+
+                    </span>
+
+
+                    <p>
+
+                        {{ suggestion }}
+
+                    </p>
+
+
+                </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+        </section>
+
+
+        {% endif %}
+
+
+
+        <!-- ================================================= -->
+        <!-- EDUCATION -->
+        <!-- ================================================= -->
+
+        <section class="panel">
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+                    <p class="section-kicker">
+                        Background
+                    </p>
+
+                    <h2>
+                        Education
+                    </h2>
+
+                </div>
+
+
+            </div>
+
+
+
+            {% if edu %}
+
+
+            <div class="timeline-list">
+
+
+                {% for item in edu %}
+
+
+                <article class="timeline-card">
+
+
+                    <div class="timeline-dot">
+                    </div>
+
+
+                    <div>
+
+
+                        <h3>
+
+                            {{
+                                item.get(
+                                    "degree",
+                                    "Degree not detected"
+                                )
+                            }}
+
+                        </h3>
+
+
+
+                        {% if item.get("institution") %}
+
+                        <p>
+
+                            <strong>
+                                Institution:
+                            </strong>
+
+                            {{
+                                item.get(
+                                    "institution"
+                                )
+                            }}
+
+                        </p>
+
+                        {% endif %}
+
+
+
+                        {% if item.get("score") %}
+
+                        <p>
+
+                            <strong>
+                                Score:
+                            </strong>
+
+                            {{
+                                item.get(
+                                    "score"
+                                )
+                            }}
+
+                        </p>
+
+                        {% endif %}
+
+
+
+                        {% if item.get("duration") %}
+
+                        <p>
+
+                            <strong>
+                                Duration:
+                            </strong>
+
+                            {{
+                                item.get(
+                                    "duration"
+                                )
+                            }}
+
+                        </p>
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                </article>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+            {% else %}
+
+
+                <p class="empty-state">
+
+                    Education information was not detected.
+
+                </p>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- EXPERIENCE -->
+        <!-- ================================================= -->
+
+        <section class="panel">
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+                    <p class="section-kicker">
+                        Employment
+                    </p>
+
+                    <h2>
+                        Experience
+                    </h2>
+
+                </div>
+
+
+
+                <span class="count-pill">
+
+                    {{
+                        exp.get(
+                            "total_years",
+                            0
+                        )
+                    }}
+
+                    years
+
+                </span>
+
+
+            </div>
+
+
+
+            <div class="experience-summary">
+
+
+                <div>
+
+
+                    <span class="label">
+
+                        Total Experience
+
+                    </span>
+
+
+                    <strong>
+
+                        {{
+                            exp.get(
+                                "total_years",
+                                0
+                            )
+                        }}
+
+                        years
+
+                    </strong>
+
+
+                </div>
+
+
+
+                <div>
+
+
+                    <span class="label">
+
+                        Job Titles
+
+                    </span>
+
+
+                    <strong>
+
+
+                        {% if exp.get(
+                            "job_titles"
+                        ) %}
+
+
+                            {{
+                                exp.get(
+                                    "job_titles"
+                                )
+                                | join(", ")
+                            }}
+
+
+                        {% else %}
+
+
+                            Not detected
+
+
+                        {% endif %}
+
+
+                    </strong>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            {% if exp.get("records") %}
+
+
+            <div class="timeline-list">
+
+
+                {% for record in exp.get(
+                    "records",
+                    []
+                ) %}
+
+
+                <article class="timeline-card">
+
+
+                    <div class="timeline-dot">
+                    </div>
+
+
+                    <div>
+
+
+                        <h3>
+
+                            {{
+                                record.get(
+                                    "job_title"
+                                )
+                                or
+                                "Experience Record"
+                            }}
+
+                        </h3>
+
+
+                        <p>
+
+                            {{
+                                record.get(
+                                    "date_range",
+                                    ""
+                                )
+                            }}
+
+                        </p>
+
+
+                    </div>
+
+
+                </article>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+            {% elif exp.get("date_ranges") %}
+
+
+                <div class="tag-list">
+
+
+                    {% for date_range in exp.get(
+                        "date_ranges",
+                        []
+                    ) %}
+
+
+                        <span
+                            class="
+                                skill-tag
+                                neutral
+                            "
+                        >
+
+                            {{ date_range }}
+
+                        </span>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <p class="empty-state">
+
+                    No professional experience records detected.
+
+                </p>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- PROJECTS -->
+        <!-- ================================================= -->
+
+        <section class="panel">
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+                    <p class="section-kicker">
+                        Practical Work
+                    </p>
+
+                    <h2>
+                        Projects
+                    </h2>
+
+                </div>
+
+
+
+                <span class="count-pill">
+
+                    {{ project_list|length }}
+                    projects
+
+                </span>
+
+
+            </div>
+
+
+
+            {% if project_list %}
+
+
+            <div class="project-grid">
+
+
+                {% for project in project_list %}
+
+
+                <article class="project-card">
+
+
+                    <h3>
+
+                        {{
+                            project.get(
+                                "title",
+                                "Untitled Project"
+                            )
+                        }}
+
+                    </h3>
+
+
+
+                    {% if project.get(
+                        "technologies"
+                    ) %}
+
+
+                    <div
+                        class="
+                            tag-list
+                            compact
+                        "
+                    >
+
+
+                        {% for technology in project.get(
+                            "technologies",
+                            []
+                        ) %}
+
+
+                            <span
+                                class="
+                                    skill-tag
+                                    resume-skill
+                                "
+                            >
+
+                                {{ technology }}
+
+                            </span>
+
+
+                        {% endfor %}
+
+
+                    </div>
+
+
+                    {% endif %}
+
+
+
+                    {% if project.get(
+                        "description"
+                    ) %}
+
+
+                    <ul class="project-description">
+
+
+                        {% for description in project.get(
+                            "description",
+                            []
+                        ) %}
+
+
+                            <li>
+
+                                {{ description }}
+
+                            </li>
+
+
+                        {% endfor %}
+
+
+                    </ul>
+
+
+                    {% endif %}
+
+
+                </article>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+            {% else %}
+
+
+                <p class="empty-state">
+
+                    No projects detected.
+
+                </p>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- EXTRACTED RESUME TEXT -->
+        <!-- ================================================= -->
+
+        <section class="panel">
+
+
+            <details class="resume-text-details">
+
+
+                <summary>
+
+                    View Extracted Resume Text
+
+                </summary>
+
+
+
+                <div class="resume-text">
+
+                    {{ text|default("", true) }}
+
+                </div>
+
+
+            </details>
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- BOTTOM BUTTONS -->
+        <!-- ================================================= -->
+
+        <section class="bottom-actions">
+
+
+            <a
+                class="btn btn-secondary"
+                href="{{ url_for('home') }}"
+            >
+
+                Analyze Another Resume
+
+            </a>
+
+
+
+            <a
+                class="btn btn-secondary"
+                href="{{ url_for('history') }}"
+            >
+
+                View History
+
+            </a>
+
+
+
+            {% if analysis_id|default(false) %}
+
+            <a
+                class="btn btn-primary"
+                href="{{ url_for('download_analysis_pdf', analysis_id=analysis_id) }}"
+            >
+
+                Download PDF Report
+
+            </a>
+
+            {% endif %}
+
+
+        </section>
+
+
+    </main>
+
+
+</body>
+
+</html>

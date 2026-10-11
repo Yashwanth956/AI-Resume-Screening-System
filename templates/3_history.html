@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Resume Analysis History
+    </title>
+
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/history.css') }}"
+    >
+
+</head>
+
+
+<body class="history-page">
+
+
+    <!-- ================================================= -->
+    <!-- NAVIGATION -->
+    <!-- ================================================= -->
+
+    <header class="history-nav">
+
+        <div class="history-nav-inner">
+
+
+            <a
+                class="history-brand"
+                href="{{ url_for('home') }}"
+            >
+
+                <span class="history-brand-mark">
+                    AI
+                </span>
+
+                <span>
+                    Resume Screening
+                </span>
+
+            </a>
+
+
+
+            <nav class="history-nav-links">
+
+                <a href="{{ url_for('home') }}">
+                    Home
+                </a>
+
+                <a href="{{ url_for('dashboard') }}">
+                    Dashboard
+                </a>
+
+                <a
+                    href="{{ url_for('history') }}"
+                    class="active"
+                >
+                    History
+                </a>
+
+            </nav>
+
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ================================================= -->
+    <!-- MAIN CONTENT -->
+    <!-- ================================================= -->
+
+    <main class="history-shell">
+
+
+        <!-- ================================================= -->
+        <!-- PAGE HEADER -->
+        <!-- ================================================= -->
+
+        <section class="history-hero">
+
+
+            <div>
+
+                <p class="history-eyebrow">
+
+                    Saved Resume Analyses
+
+                </p>
+
+
+                <h1>
+
+                    Resume Analysis History
+
+                </h1>
+
+
+                <p>
+
+                    View, search and manage previously
+                    analyzed resumes.
+
+                </p>
+
+            </div>
+
+
+
+            <a
+                href="{{ url_for('home') }}"
+                class="history-btn history-btn-primary"
+            >
+
+                Analyze New Resume
+
+            </a>
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- SEARCH -->
+        <!-- ================================================= -->
+
+        <section class="history-card">
+
+
+            <div class="history-section-heading">
+
+
+                <div>
+
+                    <p class="history-section-kicker">
+
+                        Search
+
+                    </p>
+
+
+                    <h2>
+
+                        Find Saved Analysis
+
+                    </h2>
+
+                </div>
+
+
+                {% if analyses %}
+
+                <span class="history-count">
+
+                    {{ analyses|length }}
+                    saved
+
+                </span>
+
+                {% endif %}
+
+
+            </div>
+
+
+
+            <div class="history-search-box">
+
+
+                <label for="historySearch">
+
+                    Search by candidate, resume,
+                    match category or score
+
+                </label>
+
+
+                <div class="history-search-input-wrap">
+
+
+                    <span class="history-search-icon">
+
+                        &#128269;
+
+                    </span>
+
+
+                    <input
+                        type="text"
+                        id="historySearch"
+                        placeholder="Example: Yashwanth, BACHI.pdf, Strong Match..."
+                        oninput="filterHistory()"
+                    >
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- SAVED ANALYSES -->
+        <!-- ================================================= -->
+
+        <section class="history-card">
+
+
+            <div class="history-section-heading">
+
+
+                <div>
+
+                    <p class="history-section-kicker">
+
+                        Database
+
+                    </p>
+
+
+                    <h2>
+
+                        Saved Analyses
+
+                    </h2>
+
+                </div>
+
+
+            </div>
+
+
+
+            {% if analyses %}
+
+
+            <div class="history-table-wrap">
+
+
+                <table id="historyTable">
+
+
+                    <thead>
+
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Candidate
+                            </th>
+
+                            <th>
+                                Resume
+                            </th>
+
+                            <th>
+                                Experience
+                            </th>
+
+                            <th>
+                                ATS
+                            </th>
+
+                            <th>
+                                Job Match
+                            </th>
+
+                            <th>
+                                Category
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+
+                    </thead>
+
+
+
+                    <tbody>
+
+
+                        {% for analysis in analyses %}
+
+
+                        <tr>
+
+
+                            <!-- ID -->
+
+                            <td>
+
+                                <span class="history-id">
+
+                                    #{{ analysis.id }}
+
+                                </span>
+
+                            </td>
+
+
+
+                            <!-- CANDIDATE -->
+
+                            <td>
+
+                                <div class="candidate-cell">
+
+
+                                    <div class="candidate-avatar">
+
+                                        {{
+                                            analysis.candidate_name[0]
+                                            if analysis.candidate_name
+                                            else "?"
+                                        }}
+
+                                    </div>
+
+
+                                    <div>
+
+
+                                        <strong>
+
+                                            {{
+                                                analysis.candidate_name
+                                                or
+                                                "Unknown Candidate"
+                                            }}
+
+                                        </strong>
+
+
+                                    </div>
+
+
+                                </div>
+
+                            </td>
+
+
+
+                            <!-- RESUME -->
+
+                            <td>
+
+                                <span class="resume-file-name">
+
+                                    {{
+                                        analysis.resume_filename
+                                        or
+                                        "Unknown"
+                                    }}
+
+                                </span>
+
+                            </td>
+
+
+
+                            <!-- EXPERIENCE -->
+
+                            <td>
+
+                                <span class="experience-pill">
+
+                                    {{
+                                        analysis.total_experience
+                                        or
+                                        0
+                                    }}
+
+                                    years
+
+                                </span>
+
+                            </td>
+
+
+
+                            <!-- ATS -->
+
+                            <td>
+
+
+                                {% set ats = analysis.ats_score or 0 %}
+
+
+                                <span
+                                    class="
+                                        history-score
+
+                                        {% if ats >= 75 %}
+
+                                            score-good
+
+                                        {% elif ats >= 50 %}
+
+                                            score-medium
+
+                                        {% else %}
+
+                                            score-low
+
+                                        {% endif %}
+                                    "
+                                >
+
+                                    {{ ats }}%
+
+                                </span>
+
+
+                            </td>
+
+
+
+                            <!-- JOB MATCH -->
+
+                            <td>
+
+
+                                {% set match = analysis.job_match_score or 0 %}
+
+
+                                <span
+                                    class="
+                                        history-score
+
+                                        {% if match >= 75 %}
+
+                                            score-good
+
+                                        {% elif match >= 50 %}
+
+                                            score-medium
+
+                                        {% else %}
+
+                                            score-low
+
+                                        {% endif %}
+                                    "
+                                >
+
+                                    {{ match }}%
+
+                                </span>
+
+
+                            </td>
+
+
+
+                            <!-- CATEGORY -->
+
+                            <td>
+
+
+                                <span
+                                    class="
+                                        match-badge
+
+                                        {% if analysis.match_category == 'Strong Match' %}
+
+                                            match-strong
+
+                                        {% elif analysis.match_category == 'Moderate Match' %}
+
+                                            match-moderate
+
+                                        {% elif analysis.match_category == 'Low Match' %}
+
+                                            match-low
+
+                                        {% endif %}
+                                    "
+                                >
+
+                                    {{
+                                        analysis.match_category
+                                        or
+                                        "Not Available"
+                                    }}
+
+                                </span>
+
+
+                            </td>
+
+
+
+                            <!-- DATE -->
+
+                            <td>
+
+                                <span class="history-date">
+
+                                    {{
+                                        analysis.created_at
+                                        or
+                                        "-"
+                                    }}
+
+                                </span>
+
+                            </td>
+
+
+
+                            <!-- ACTIONS -->
+
+                            <td>
+
+
+                                <div class="history-actions">
+
+
+                                    <a
+                                        class="
+                                            history-action-btn
+                                            view-btn
+                                        "
+                                        href="{{ url_for('analysis_detail', analysis_id=analysis.id) }}"
+                                    >
+
+                                        View
+
+                                    </a>
+
+
+
+                                    <form
+                                        action="{{ url_for('delete_saved_analysis', analysis_id=analysis.id) }}"
+                                        method="POST"
+                                        onsubmit="return confirmDelete(this);"
+                                    >
+
+
+                                        <input
+                                            type="hidden"
+                                            name="candidate_name"
+                                            value="{{ analysis.candidate_name | e }}"
+                                        >
+
+
+                                        <button
+                                            type="submit"
+                                            class="
+                                                history-action-btn
+                                                delete-btn
+                                            "
+                                        >
+
+                                            Delete
+
+                                        </button>
+
+
+                                    </form>
+
+
+                                </div>
+
+
+                            </td>
+
+
+                        </tr>
+
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+
+            <!-- NO SEARCH RESULTS -->
+
+            <div
+                id="noSearchResults"
+                class="history-empty-state"
+                style="display: none;"
+            >
+
+
+                <div class="empty-icon">
+
+                    &#128269;
+
+                </div>
+
+
+                <h3>
+
+                    No matching analyses
+
+                </h3>
+
+
+                <p>
+
+                    Try another candidate name,
+                    resume filename or match category.
+
+                </p>
+
+
+            </div>
+
+
+            {% else %}
+
+
+
+            <!-- ================================================= -->
+            <!-- EMPTY DATABASE -->
+            <!-- ================================================= -->
+
+            <div class="history-empty-state">
+
+
+                <div class="empty-icon">
+
+                    &#128196;
+
+                </div>
+
+
+                <h3>
+
+                    No saved analyses yet
+
+                </h3>
+
+
+                <p>
+
+                    Analyze your first resume and
+                    it will appear here automatically.
+
+                </p>
+
+
+                <a
+                    href="{{ url_for('home') }}"
+                    class="history-btn history-btn-primary"
+                >
+
+                    Analyze Resume
+
+                </a>
+
+
+            </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- BOTTOM ACTIONS -->
+        <!-- ================================================= -->
+
+        <section class="history-bottom-actions">
+
+
+            <a
+                href="{{ url_for('home') }}"
+                class="history-btn history-btn-secondary"
+            >
+
+                Home
+
+            </a>
+
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="history-btn history-btn-secondary"
+            >
+
+                View Dashboard
+
+            </a>
+
+
+            <a
+                href="{{ url_for('home') }}"
+                class="history-btn history-btn-primary"
+            >
+
+                Analyze New Resume
+
+            </a>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- ================================================= -->
+    <!-- JAVASCRIPT -->
+    <!-- ================================================= -->
+
+    <script>
+
+
+        function filterHistory() {
+
+
+            const input =
+                document.getElementById(
+                    "historySearch"
+                );
+
+
+            const table =
+                document.getElementById(
+                    "historyTable"
+                );
+
+
+            const noResults =
+                document.getElementById(
+                    "noSearchResults"
+                );
+
+
+            if (!input || !table) {
+
+                return;
+
+            }
+
+
+            const filter =
+                input.value
+                    .toLowerCase()
+                    .trim();
+
+
+            const tbody =
+                table.getElementsByTagName(
+                    "tbody"
+                )[0];
+
+
+            if (!tbody) {
+
+                return;
+
+            }
+
+
+            const rows =
+                tbody.getElementsByTagName(
+                    "tr"
+                );
+
+
+            let visibleRows = 0;
+
+
+            for (
+                let i = 0;
+                i < rows.length;
+                i++
+            ) {
+
+
+                const text =
+                    rows[i]
+                        .textContent
+                        .toLowerCase();
+
+
+                const matches =
+                    text.includes(
+                        filter
+                    );
+
+
+                rows[i].style.display =
+                    matches
+                    ? ""
+                    : "none";
+
+
+                if (matches) {
+
+                    visibleRows++;
+
+                }
+
+
+            }
+
+
+            if (noResults) {
+
+
+                noResults.style.display =
+                    visibleRows === 0
+                    ? "block"
+                    : "none";
+
+
+            }
+
+
+        }
+
+
+
+        function confirmDelete(form) {
+
+
+            const candidateInput =
+                form.querySelector(
+                    'input[name="candidate_name"]'
+                );
+
+
+            const candidateName =
+                candidateInput
+                ? candidateInput.value
+                : "this candidate";
+
+
+            return confirm(
+
+                "Delete the saved analysis for "
+                +
+                candidateName
+                +
+                "?\n\nThis action cannot be undone."
+
+            );
+
+
+        }
+
+
+    </script>
+
+
+</body>
+
+</html>
